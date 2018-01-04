@@ -15,7 +15,9 @@ let opened = [];
 let moves = 0;
 // Indicate the number of correct matches till now
 let matchFound = 0;
+// The time elapsed by seconds
 let sec = 0;
+// Game stars difficulty setup
 const highRank = list.length / 2 + 4;
 const midRank = list.length / 2 + 8;
 const lowRank = list.length / 2 + 12;
@@ -26,7 +28,7 @@ const lowRank = list.length / 2 + 12;
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-function initialGame(){    
+function initialGame(){
     // Clean the deck
     $('.deck').empty();
     // Shuffle the list of cards
@@ -44,6 +46,7 @@ function initialGame(){
     $('.stars i').removeClass('fa-star-o').addClass('fa-star');
     // Add the card listener
     cardListener()
+    // Add the timer
     startTimer();
 }
 
@@ -122,6 +125,7 @@ function cardListener() {
             $('.moves').html(moves);
         }
 
+        // Check the win condition
         if (list.length / 2 === matchFound) {
             setRating(moves);
             let score = setRating(moves).score;
@@ -159,10 +163,7 @@ function setRating(moves) {
 	} else if (moves > midRank && moves < lowRank) {
 		$('.stars i').eq(1).removeClass('fa-star').addClass('fa-star-o');
 		rating = 1;
-	} else if (moves > lowRank) {
-		$('.stars i').eq(0).removeClass('fa-star').addClass('fa-star-o');
-		rating = 0;
-	}	
+	}
 	return { score: rating };
 };
 
@@ -170,14 +171,17 @@ function setRating(moves) {
 $('.restart').bind('click', function() {
     swal({
         title: 'Are you sure?',
-        text: "Your progress will be Lost!",
+        text: 'Your progress will be Lost!',
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#02ccba',
         cancelButtonColor: '#f95c3c',
-        confirmButtonText: 'Yes, Restart Game!'
+        confirmButtonText: 'Yes, Restart!'
     }).then(function(isConfirm) {
         if (isConfirm) {
+            clearInterval(timer);
+            $(".minutes").html("00");
+            $(".seconds").html("00");
             initialGame();
         }
     })
