@@ -19,7 +19,6 @@ let matchFound = 0;
 let sec = 0;
 // Game stars difficulty setup
 const highRank = list.length / 2 + 4;
-const midRank = list.length / 2 + 8;
 const lowRank = list.length / 2 + 12;
 
 /*
@@ -65,17 +64,6 @@ function shuffle(array) {
     return array;
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
 // Start timer on the first card click
 function startTimer() {
         let clicks = 0;
@@ -92,7 +80,6 @@ function startTimer() {
     })
 }
 
-
 // Card listener
 function cardListener() {
     $(".card").on("click", function() {
@@ -101,7 +88,6 @@ function cardListener() {
 
         $(this).addClass('open show');
         opened.push($(this).html());
-        console.log(opened);
 
         if (opened.length > 1) {
             if ($(this).html() === opened[0]){
@@ -128,7 +114,7 @@ function cardListener() {
         // Check the win condition
         if (list.length / 2 === matchFound) {
             setRating(moves);
-            let score = setRating(moves).score;
+            let score = setRating(moves);
             setTimeout(function() {
                 endGame(moves, score);
             }, 500);
@@ -157,14 +143,14 @@ function endGame(moves, score) {
 // Set Rating
 function setRating(moves) {
 	let rating = 3;
-	if (moves > highRank && moves < midRank) {
+	if (moves > highRank && moves < lowRank) {
 		$('.stars i').eq(2).removeClass('fa-star').addClass('fa-star-o');
 		rating = 2;
-	} else if (moves > midRank && moves < lowRank) {
+	} else if (moves >= lowRank) {
 		$('.stars i').eq(1).removeClass('fa-star').addClass('fa-star-o');
 		rating = 1;
 	}
-	return { score: rating };
+	return rating;
 };
 
 // Restart
