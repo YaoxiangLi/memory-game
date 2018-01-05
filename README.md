@@ -1,4 +1,4 @@
-# Memory Game Project
+# Memory Game
 
 ## Table of Contents
 
